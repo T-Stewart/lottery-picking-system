@@ -1,0 +1,6 @@
+.form-area {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  margin: 1em;
+}
