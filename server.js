@@ -3,13 +3,14 @@ const mongoose = require('mongoose')
 const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
+const dotenv = require("dotenv");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 const routes = require('./routes/api');
 
-
+dotenv.config()
 
 mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/lottery_draft', {
     useNewUrlParser: true,
