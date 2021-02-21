@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 if(process.env.NODE_ENV === 'production'){
-    app.use(express.static('front-end/build'))
+    app.use(express.static('/front-end/build'))
 }
 
 //HTTP request Logger
