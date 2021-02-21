@@ -11,7 +11,7 @@ const routes = require('./routes/api');
 
 const MONGODB_URI = 'mongodb+srv://tom_stewart-93:Sn5cnEvnADytEWz@lotterypick.hkhzg.mongodb.net/lottery_draft?retryWrites=true&w=majority'
 
-mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/lottery_draft', {
+mongoose.connect(MONGODB_URI ||'mongodb://localhost/lottery_draft', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
