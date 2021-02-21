@@ -1,16 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import $ from 'jquery'
-import TicketCollection from './TicketCollection'
-import img from './Images/tomorrow-tix.svg'
-import './Enter.css'
-//TODO
-//Github
-//Explain yourself
-//refactor
-//Github
-//tinker
-//Github
+import $ from 'jquery';
+import TicketCollection from './TicketCollection';
+import img from '../Images/tomorrow-tix.svg';
+import './Enter.css';
 
 export default class Enter extends React.Component {
     constructor(){
@@ -29,17 +22,12 @@ export default class Enter extends React.Component {
 
     componentDidMount = () => {
         this.getLotteryEntrants(); 
-    }
+    };
 
-    getLotteryEntrants = () => {
-        axios.get('/api')
-        .then((response) => {
-            const data = response.data;
-            this.setState({ entrants: data});
-            console.log('data has been recieved');
-        })
-        .catch(() => {
-            alert('error retrieving data')
+    handleChange = ({target}) => {
+        const {name, value } = target;
+        this.setState({
+            [name]: value
         });
     };
 
@@ -47,7 +35,7 @@ export default class Enter extends React.Component {
         e.preventDefault();
         const payload = {
             name: this.state.name,
-            ticketRequest: this.state.ticketRequest
+            ticketRequest: this.state.ticketRequest,
         };
         
         axios({
@@ -66,8 +54,6 @@ export default class Enter extends React.Component {
         });
     };
 
-
-
     resetUserInputs = () => {
         this.setState({
             name: '',
@@ -75,15 +61,29 @@ export default class Enter extends React.Component {
         });
     };
 
-    handleChange = ({target}) => {
-        const {name, value } = target;
-        this.setState({
-            [name]: value
+    getLotteryEntrants = () => {
+        axios.get('/api')
+        .then((response) => {
+            const data = response.data;
+            this.setState({ entrants: data});
+            console.log('data has been recieved');
+        })
+        .catch((err) => {
+            console.log(err);
         });
     };
 
-    test = () => {
-        console.log(this.state.entrants);
+    shuffle = (array) => {
+        let currentIndex = array.length, temporaryValue, randomIndex;
+        while( 0 !== currentIndex){
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue
+        };
+        return array;
     };
 
     lotteryResults = () => {
@@ -91,7 +91,7 @@ export default class Enter extends React.Component {
         let draw = this.shuffle(this.state.entrants);
         let winners = draw.slice(0,numberOfWinners);
 
-        console.log(winners);
+        console.log(draw);
 
         let number = new TicketCollection(...winners);
         let tickets = number.sum('ticketRequest');
@@ -113,31 +113,18 @@ export default class Enter extends React.Component {
         
         if(this.state.draw === true) {
             return(
-                <div className="results">
+                <div className="showResults">
                     <h1>The draw has been completed</h1>
                     <h3>The winners are...</h3>
-                    {this.state.winners.map(({id,name}) => {
+                    {this.state.winners.map(({name, _id}) => {
                         return(
-                            <h4 className="winners" key={id}>{name}</h4>
+                            <h4 className="winners" key={_id} >{name}</h4>
                         )
                     })}
                     <h3>Congratulations to you all, enjoy your show!</h3>
                 </div>
             );
         };
-    };
-
-    shuffle = (array) => {
-        let currentIndex = array.length, temporaryValue, randomIndex;
-        while( 0 !== currentIndex){
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue
-        };
-        return array;
     };
 
     render() {
@@ -164,7 +151,6 @@ export default class Enter extends React.Component {
                     </select>                     
                     <button className="btn btn-outline-secondary"id="button" >Submit</button>
                     </form>
-                    {/* <button className="btn-btn-secondary" onClick={this.test}> Test </button> */}
                     <button className="btn btn-outline-dark" id="results" onClick={this.lotteryResults}>Lottery Results</button>
                     <div>
                         {this.displayWinner()}
