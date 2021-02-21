@@ -3,9 +3,9 @@ import axios from 'axios';
 import $ from 'jquery';
 import TicketCollection from './TicketCollection';
 import img from '../Images/tomorrow-tix.svg';
-import './Enter.css';
+import './Lottery.css';
 
-export default class Enter extends React.Component {
+export default class Lottery extends React.Component {
     constructor(){
         super();
         this.state={
@@ -88,18 +88,18 @@ export default class Enter extends React.Component {
 
     lotteryResults = () => {
         let numberOfWinners = this.state.ticketAllocation / this.state.entrants[0].ticketRequest;
-        let draw = this.shuffle(this.state.entrants);
-        let winners = draw.slice(0,numberOfWinners);
+        let startDraw = this.shuffle(this.state.entrants);
+        let userWinners = startDraw.slice(0,numberOfWinners);
 
-        console.log(draw);
+        console.log(startDraw);
 
-        let number = new TicketCollection(...winners);
+        let number = new TicketCollection(...userWinners);
         let tickets = number.sum('ticketRequest');
 
         this.setState({
             draw:true, 
             ticketAllocation: this.state.ticketAllocation - tickets,
-            winners: winners, 
+            winners: userWinners, 
             hide: true
         });      
     };

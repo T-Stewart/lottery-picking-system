@@ -8,6 +8,6 @@ const lotteryEntrantSchema = Schema({
 });
 
 //model
-const LotteryEntrant = mongoose.model('LoteryEntrant', lotteryEntrantSchema);
+const LotteryEntrant = mongoose.model('Lottery-entrant', lotteryEntrantSchema);
 
 module.exports = LotteryEntrant;
