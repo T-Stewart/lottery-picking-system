@@ -9,9 +9,9 @@ const PORT = process.env.PORT || 8080;
 
 const routes = require('./routes/api');
 
-const MONGODB_URI = 'mongodb+srv://tom_stewart-93:Sn5cnEvnADytEWz@lotterypick.hkhzg.mongodb.net/lottery_draft?retryWrites=true&w=majority'
 
-mongoose.connect(MONGODB_URI ||'mongodb://localhost/lottery_draft', {
+
+mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/lottery_draft', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -22,13 +22,15 @@ mongoose.connection.on('connected', () => {
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('front-end/build'))
+}
+
 //HTTP request Logger
 app.use(cors())
 app.use(morgan('tiny'));
 app.use('/api', routes);
 
-if(process.env.NODE_ENV === 'production'){
-    app.use(express.static('front-end/build'))
-}
+
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
